@@ -91,6 +91,7 @@ class VerticalAttention(nn.Module):
         cat = self.norm(cat)
         cat = self.conv_block(cat)
         sum += self.dropout(self.dense_conv_block(cat.permute(0, 2, 1)))
+        sum += self.dropout(self.dense_enc(self.h_features.permute(0, 2, 1)))
 
         if self.use_hidden:
             sum += self.dropout(self.dense_hidden(hidden[0]).permute(1, 0, 2))
@@ -139,4 +140,3 @@ class LineDecoderCTC(nn.Module):
         out = torch.squeeze(out, dim=2)
         out = log_softmax(out, dim=1)
         return out, h
-
